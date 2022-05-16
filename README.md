@@ -1,1 +1,1 @@
-Here lay some routines that are constantly used at the National Department of Infrastructure and Transport of Brazil - [DNIT](https://www.gov.br/dnit/), during data validation, file management, and manipulation.
+Here lay some routines that i'm constantly using at the National Department of Infrastructure and Transport of Brazil - [DNIT](https://www.gov.br/dnit/), during data validation, file management, and manipulation.

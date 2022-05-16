@@ -29,7 +29,7 @@ public class HandlesCSV {
      * @param path (String) Caminho do arquivo CSV contendo o caminho das pastas.
      * @return ArrayList contendo todos os arquivos em String.
      */
-    public static ArrayList<String> getSNVs(String path) {
+    public static ArrayList<String> getPaths(String path) {
         ArrayList<String> lista = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(path))) {
             while (scanner.hasNext()) {
@@ -124,6 +124,7 @@ public class HandlesCSV {
 
 
 
+
     /** Compara se todos os elementos da list1 estão presentes na list2
      * @param list1 Lista específica que tem alguns dos elementos
      * @param list2 Lista geral com todos os elementos
@@ -181,7 +182,7 @@ public class HandlesCSV {
         }
     }
 
-    
+
 
 
     private static boolean isValidString(String line) {
