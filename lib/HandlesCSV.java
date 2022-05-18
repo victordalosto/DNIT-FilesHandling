@@ -6,8 +6,10 @@
 
 package lib;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.CopyOption;
@@ -54,11 +56,14 @@ public class HandlesCSV {
     public static void updateLog(String text, String path) {
         Path caminhoLog = Paths.get(path);
         try {
-            if (caminhoLog.toFile().isFile()) {
-                Files.writeString(Paths.get(path), ("\n" + text), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            if (!caminhoLog.toFile().isFile()) {
+                Files.writeString(Paths.get(path), text, StandardCharsets.UTF_8, StandardOpenOption.CREATE); // Create new file
             } else {
-                // Create new file
-                Files.writeString(Paths.get(path), text, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+                BufferedReader atualContent = new BufferedReader(new FileReader(path));
+                if (isValidString(atualContent.readLine()))
+                    text = "\n" + text;
+                Files.writeString(Paths.get(path), (text), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+                atualContent.close();
             }
         } catch (IOException ex) {
             ex.printStackTrace();

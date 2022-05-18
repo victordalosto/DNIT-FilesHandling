@@ -51,12 +51,11 @@ public class FindCSV {
                 wrongMSG += key + "\n";
             else
                 correctMSG += key + "\n";
-
         });
 
-        // Removes the last \n of the String and updates the .txt file
-        HandlesCSV.updateLog(wrongMSG.replaceAll("\n$", ""), logsPath_Failed);
-        HandlesCSV.updateLog(correctMSG.replaceAll("\n$", ""), logsPath_Correct);
+        // Updates the .txt file
+        HandlesCSV.updateLog(wrongMSG, logsPath_Failed);
+        HandlesCSV.updateLog(correctMSG, logsPath_Correct);
 
         /** Ordena a ordem em que aparece as informações do Log */
         HandlesCSV.ordenateLog(logsPath_Correct);
