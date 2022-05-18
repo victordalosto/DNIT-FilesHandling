@@ -75,7 +75,7 @@ public class HandlesCSV {
 
     /** {@code UpdateLOG}. Inserts the 'text' information in the log of the path inserted
      * or create a new one if it doesn't exists.
-     * @param text (String): Text that will be updated in the Log
+     * @param text List<String>: Text that will be updated in the Log
      * @param path (String): Path to a Log.txt File
      */
     public static void updateLog(List<String> lista, String path) {
