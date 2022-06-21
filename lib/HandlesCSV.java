@@ -1,6 +1,6 @@
 
 /**
- * Library that contains functions to handle CSV files
+ * Library that contains functions to handle text files
  * @Author: Victor Dalosto
  */
 
@@ -23,12 +23,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 
 public class HandlesCSV {
 
-    /**{@code getSNV} Obtem a lista de trechos dentro de um arquivo CSV.
-     * @param path (String) Caminho do arquivo CSV contendo o caminho das pastas.
+
+    /**{@code getSNV} Obtem ArrayList de trechos dentro de um arquivo.
+     * @param path (String) Caminho do arquivo contendo o caminho das pastas.
      * @return ArrayList contendo todos os arquivos em String.
      */
     public static ArrayList<String> getPaths(String path) {
@@ -62,7 +64,7 @@ public class HandlesCSV {
                 BufferedReader atualContent = new BufferedReader(new FileReader(path));
                 if (isValidString(atualContent.readLine()))
                     text = "\n" + text;
-                Files.writeString(Paths.get(path), (text), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+                Files.writeString(Paths.get(path), text, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
                 atualContent.close();
             }
         } catch (IOException ex) {
@@ -136,7 +138,7 @@ public class HandlesCSV {
      * @return HashMap com <ItemList1, Boolean se tem nas duas listas>
      */
     public static HashMap<String, Boolean> compareTwoLists(ArrayList<String> list1, ArrayList<String> list2) {
-        HashMap<String, Boolean> listaVerificacao = new HashMap<>();
+        HashMap<String, Boolean> mapVerificacao = new HashMap<>();
         list1.forEach(item -> {
             boolean hasCSV = false;
             for (int i = 0; i < list2.size(); i++) {
@@ -145,15 +147,38 @@ public class HandlesCSV {
                     break;
                 }
             }
-            listaVerificacao.put(item, hasCSV);
+            mapVerificacao.put(item, hasCSV);
         });
-        return listaVerificacao;
+        return mapVerificacao;
     }
 
 
 
 
-    /** {@code copyFolder}. Walks a folder and copy every file in Sources Fodler to Destiny */
+    /** Compara todos os elementos da lista1 com a list2.
+     * Analisa elementos faltando e os duplicados em cada lista.
+     * @return HashMap com <ItemList1, Boolean se tem nas duas listas>
+     */
+    public static HashMap<String, String> compareFullyTwoLists(List<String> list1, List<String> list2) {
+        HashMap<String, String> mapCompleto = new HashMap<>();
+        // Adiciona elementos sobrando em list1
+        list1.forEach(item -> { if(!list2.contains(item)) {mapCompleto.put(item, "Item sobrando na list 1");}});
+        // Adiciona elementos sobrando em list2
+        list2.forEach(item -> { if(!list1.contains(item)) {mapCompleto.put(item, "Item sobrando na list 2");}});
+        // Adiciona elementos duplicados em list1
+        List<String> duplicatedValuesList = new ArrayList<>();
+        duplicatedValuesList = list1.stream().filter(e -> Collections.frequency(list1, e) > 1).distinct().collect(Collectors.toList());
+        duplicatedValuesList.forEach(item -> mapCompleto.put(item, "Valor duplicado na list 1"));
+        duplicatedValuesList = new ArrayList<>();
+        duplicatedValuesList = list2.stream().filter(e -> Collections.frequency(list2, e) > 1).distinct().collect(Collectors.toList());
+        duplicatedValuesList.forEach(item -> mapCompleto.put(item, "Valor duplicado na list 2"));
+        return mapCompleto;
+    }
+
+
+
+
+    /** {@code copyFolder}. Walks a folder and copy every file in Source Folder to Destination */
     public static void copyFolder(String src, String dest, boolean overwrite) {
         try {
             Files.walk(Paths.get(src)).forEach(a -> {
